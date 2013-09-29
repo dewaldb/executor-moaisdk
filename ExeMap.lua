@@ -42,32 +42,33 @@ function _M.init(viewport,screenWidth,screenHeight)
   _M.entities = {}
   _M.entityCount = 0
   
-  MOAIGfxDevice.getFrameBuffer():setClearColor((1/255)*146,(1/255)*75,(1/255)*45,0)
+  MOAIGfxDevice.getFrameBuffer():setClearColor(0,0,0,0)
   _M.camera = ExeCamera.new(_M.layer,viewport,screenWidth/30,0.99)
   _M.player = nil
 end
 
 function _M.loadMap(filename)
-  local mapd = nil
-  MapData = function(data)
-    mapd = data
-  end
-  dofile(filename)
-  
-  _M.physWorld:setGravity ( mapd.settings.gravity.x, mapd.settings.gravity.y )
-  
-  for i,entity in ipairs(mapd.entities) do
-    _M.spawnEntity(entity.class_name,entity.args)
-    print (_M.entities[entity.args.name])
-  end
-  
-  for i,group in pairs(_M.entities) do
-    print("i: "..i)
-  end
-  
-  if(_M.player~=nil) then
-    _M.player:activate(_M.camera)
-  end
+    local mapd = nil
+    MapData = function(data)
+        mapd = data
+    end
+    dofile(filename)
+    
+    MOAIGfxDevice.getFrameBuffer():setClearColor((1/255)*mapd.settings.clear_color.R,(1/255)*mapd.settings.clear_color.G,(1/255)*mapd.settings.clear_color.B,mapd.settings.clear_color.A)
+    _M.physWorld:setGravity ( mapd.settings.gravity.x, mapd.settings.gravity.y )
+    
+    for i,entity in ipairs(mapd.entities) do
+        _M.spawnEntity(entity.class_name,entity.args)
+        print (_M.entities[entity.args.name])
+    end
+    
+    for i,group in pairs(_M.entities) do
+        print("i: "..i)
+    end
+    
+    if(_M.player~=nil) then
+        _M.player:activate(_M.camera)
+    end
 end
 
 function _M.clearMap()
