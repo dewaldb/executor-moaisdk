@@ -1,12 +1,12 @@
 --[[
-  FILE: ExeMap.lua
-	DESCRIPTION: Map object for loading and clearing levels
-	AUTHOR: Dewald Bodenstein
-	VERSION: 0.1
-	MOAI VERSION: v1.4p0
-	CREATED: 17-08-13
-  
-  http://lua-users.org/wiki/ObjectOrientationTutorial
+    FILE: ExeMap.lua
+    DESCRIPTION: Map object for loading and clearing levels
+    AUTHOR: Dewald Bodenstein
+    VERSION: 0.1
+    MOAI VERSION: v1.4p0
+    CREATED: 17-08-13
+    
+    http://lua-users.org/wiki/ObjectOrientationTutorial
 ]]
 
 ExeCamera = require "executor/ExeCamera"
@@ -16,10 +16,6 @@ ExeButton = require "executor/props/ExeButton"
 ExeCrate = require "executor/props/ExeCrate"
 ExeRock = require "executor/props/ExeRock"
 ExeFloorChain = require "executor/props/ExeFloorChain"
-ExeRanchCow = require "executor/props/ExeRanchCow"
-ExeRanchCows = require "executor/props/ExeRanchCows"
-ExeRanchHorse = require "executor/props/ExeRanchHorse"
-ExeRanchHorses = require "executor/props/ExeRanchHorses"
 
 local _M = {}
 
