@@ -2,7 +2,7 @@
     FILE: ExeMap.lua
     DESCRIPTION: Map object for loading and clearing levels
     AUTHOR: Dewald Bodenstein
-    VERSION: 0.1
+    VERSION: 0.2
     MOAI VERSION: v1.4p0
     CREATED: 17-08-13
     
