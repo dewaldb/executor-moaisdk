@@ -7,7 +7,7 @@
     CREATED: 08-10-13
 ]]
 
-local json = require ("libs/dkjson")
+local json = require ("executor/libs/dkjson")
 
 local ExeRigidBody = {}
 ExeRigidBody.__index = ExeRigidBody
@@ -23,8 +23,9 @@ function ExeRigidBody.new(args)
     
     self.name = args.name
     
-    local textfile = io.input(args.filename):read()
-    print(textfile)
+    local textfile = io.input("data/bodies/"..args.filename):read()
+    local bodyfile = json.decode(textfile, 1, nil)
+    print(bodyfile)
     --[[self.body = ExeMap.physWorld:addBody ( MOAIBox2DBody.STATIC )
     self.body:setTransform(args.x,args.y)
     

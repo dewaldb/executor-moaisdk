@@ -15,6 +15,7 @@ ExeTimer = require "executor/props/ExeTimer"
 ExeButton = require "executor/props/ExeButton"
 ExeCrate = require "executor/props/ExeCrate"
 ExeRock = require "executor/props/ExeRock"
+ExeRigidBody = require "executor/props/ExeRigidBody"
 ExeFloorChain = require "executor/props/ExeFloorChain"
 
 local _M = {}
