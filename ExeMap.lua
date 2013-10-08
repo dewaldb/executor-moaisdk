@@ -94,7 +94,7 @@ function _M.spawnEntity(class,args)
     _M.entities[args.name] = {}
   end
   
-  print(_M.entities[args.name])
+  print(class.." = "..args.name)
   
   table.insert(_M.entities[args.name], _G[class].new(args))
 end
