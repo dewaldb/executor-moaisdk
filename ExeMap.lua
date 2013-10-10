@@ -9,6 +9,8 @@
     http://lua-users.org/wiki/ObjectOrientationTutorial
 ]]
 
+local json = require ("executor/libs/dkjson")
+
 ExeCamera = require "executor/ExeCamera"
 ExePlayer = require "executor/props/ExePlayer"
 ExeTimer = require "executor/props/ExeTimer"
@@ -49,6 +51,18 @@ function _M.loadMap(filename)
         mapd = data
     end
     dofile(filename)
+    
+    if mapd.settings.physics_bodies then
+        local textfile = io.input("data/bodies/"..mapd.settings.physics_bodies):read()
+        local obj, pos, err = json.decode (textfile, 1, nil)
+        if obj then
+            _M.rigidBodies = obj["rigidBodies"]
+            _M.dynamicBodies = obj["dynamicBodies"]
+        end
+        if err then
+            print("Physics Bodies Error: "..err)
+        end
+    end
     
     MOAIGfxDevice.getFrameBuffer():setClearColor((1/255)*mapd.settings.clear_color.R,(1/255)*mapd.settings.clear_color.G,(1/255)*mapd.settings.clear_color.B,mapd.settings.clear_color.A)
     _M.physWorld:setGravity ( mapd.settings.gravity.x, mapd.settings.gravity.y )
