@@ -7,8 +7,6 @@
     CREATED: 08-10-13
 ]]
 
-local json = require ("executor/libs/dkjson")
-
 local ExeRigidBody = {}
 ExeRigidBody.__index = ExeRigidBody
 
@@ -23,30 +21,43 @@ function ExeRigidBody.new(args)
     
     self.name = args.name
     
-    local textfile = io.input("data/bodies/"..args.filename):read()
-    local bodyfile = json.decode(textfile, 1, nil)
-    print(bodyfile)
-    --[[self.body = ExeMap.physWorld:addBody ( MOAIBox2DBody.STATIC )
+    local rigid_body = ExeMap.rigidBodies[args.rigid_body]
+    
+    self.body = ExeMap.physWorld:addBody ( MOAIBox2DBody.DYNAMIC )
     self.body:setTransform(args.x,args.y)
     
-    body_fixture = self.body:addChain( args.points )
-    body_fixture:setFriction(args.friction)
+    local body_fixture = nil
+    
+    --if rigid_body["polygons"] then
+    --    local body_fixture = self.body:addChain( args.points )
+    --end
+    
+    if rigid_body["circles"] then
+        for i,circle in ipairs(rigid_body["circles"]) do
+            body_fixture = self.body:addCircle ( circle.cx, circle.cy, circle.r )
+        end
+    end
+    
+    if args.friction then
+        body_fixture:setFriction(args.friction)
+    end
+    
     body_fixture:setFilter(ExeMap.BOX2D_WORLD,ExeMap.BOX2D_WORLD)
-    ]]
+    
     --floorFixture:setFilter ( 0x02 )
     --floorFixture:setCollisionHandler ( onCollide, MOAIBox2DArbiter.BEGIN + MOAIBox2DArbiter.END, 0x00 )
     
-    --[[texture = MOAIGfxQuad2D.new ()
-    texture:setTexture ( 'moai.png' )
-    texture:setRect ( -0.5, -0.5, 0.5, 0.5 )
+    local texture = MOAIGfxQuad2D.new ()
+    texture:setTexture ( string.gsub(rigid_body["imagePath"],"../","") ) -- remove relative paths added by physics-body-editor
+    texture:setRect ( 0, 0, 1, 1 )
     
-    sprite = MOAIProp2D.new ()
+    local sprite = MOAIProp2D.new ()
     sprite:setDeck ( texture )
     sprite.body = self.body
     sprite:setParent ( self.body )
-    map.layer:insertProp ( sprite )]]
+    ExeMap.layer:insertProp ( sprite )
     
-    --self.body.entity = self
+    self.body.entity = self
     
     return self
 end
