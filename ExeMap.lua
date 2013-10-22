@@ -9,9 +9,12 @@
     http://lua-users.org/wiki/ObjectOrientationTutorial
 ]]
 
-local json = require ("executor/libs/dkjson")
+json = require ("executor/libs/dkjson")
 
 ExeCamera = require "executor/ExeCamera"
+ExeEditor = require "executor/props/ExeEditor"
+ExeEditorPoint = require "executor/props/ExeEditorPoint"
+ExeEditorPointsChain = require "executor/props/ExeEditorPointsChain"
 ExePlayer = require "executor/props/ExePlayer"
 ExeTimer = require "executor/props/ExeTimer"
 ExeButton = require "executor/props/ExeButton"
@@ -27,22 +30,28 @@ _M.BOX2D_PROPS = 0x0002
 _M.BOX2D_SENSOR = 0x0003
 
 function _M.init(viewport,screenWidth,screenHeight)
-  _M.layer = MOAILayer2D.new ()
-  _M.layer:setViewport ( viewport )
-  MOAISim.pushRenderPass ( _M.layer )
-  
-  _M.physWorld = MOAIBox2DWorld.new ()
-  _M.physWorld:setGravity ( 0, -10 )
-  _M.physWorld:setUnitsToMeters ( 2 )
-  _M.physWorld:start ()
-  _M.layer:setBox2DWorld ( _M.physWorld )
-  
-  _M.entities = {}
-  _M.entityCount = 0
-  
-  MOAIGfxDevice.getFrameBuffer():setClearColor(0,0,0,0)
-  _M.camera = ExeCamera.new(_M.layer,viewport,screenWidth/30,0.99)
-  _M.player = nil
+    ExeMap.viewport = viewport
+    
+    _M.layer = MOAILayer2D.new ()
+    _M.layer:setViewport ( viewport )
+    MOAISim.pushRenderPass ( _M.layer )
+    
+    _M.debug_layer = MOAILayer2D.new ()
+    _M.debug_layer:setViewport ( viewport )
+    MOAISim.pushRenderPass ( _M.debug_layer )
+    
+    _M.physWorld = MOAIBox2DWorld.new ()
+    _M.physWorld:setGravity ( 0, -10 )
+    _M.physWorld:setUnitsToMeters ( 2 )
+    _M.physWorld:start ()
+    _M.debug_layer:setBox2DWorld ( _M.physWorld )
+    
+    _M.entities = {}
+    _M.entityCount = 0
+    
+    MOAIGfxDevice.getFrameBuffer():setClearColor(1,1,1,0)
+    _M.camera = ExeCamera.new(0.1)
+    _M.player = nil
 end
 
 function _M.loadMap(filename)
@@ -82,36 +91,40 @@ function _M.loadMap(filename)
 end
 
 function _M.clearMap()
-  _M.camera:clearAnchors()
-  
-  for i,group in pairs(_M.entities) do
-    print (i)
-    for j,entity in ipairs(group) do
-      print("destroy " .. entity.name)
-      entity:destroy()
-      entity = nil
+    _M.camera:clearAnchors()
+
+    for i,group in pairs(_M.entities) do
+        print (i)
+        for j,entity in ipairs(group) do
+            print("destroy " .. entity.name)
+            entity:destroy()
+            entity = nil
+        end
+        group = nil
     end
-    group = nil
-  end
-  
-  _M.entities = {}
-  _M.entityCount = 0
+
+    _M.entities = {}
+    _M.entityCount = 0
 end
 
 function _M.spawnEntity(class,args)
-  _M.entityCount = _M.entityCount+1
-  
-  if args.name == nil then
-    args.name = "Entity_" .. _M.entityCount
-  end
-  
-  if _M.entities[args.name] == nil then
-    _M.entities[args.name] = {}
-  end
-  
-  print(class.." = "..args.name)
-  
-  table.insert(_M.entities[args.name], _G[class].new(args))
+    _M.entityCount = _M.entityCount+1
+    
+    if args.name == nil then
+        args.name = "Entity_" .. _M.entityCount
+    end
+    
+    if _M.entities[args.name] == nil then
+        _M.entities[args.name] = {}
+    end
+    
+    print(class.." = "..args.name)
+
+    local ent = _G[class].new(args)
+    
+    table.insert(_M.entities[args.name], ent)
+    
+    return ent
 end
 
 function _M.globalCollision(phase, fix_a, fix_b, arbiter)
