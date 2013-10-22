@@ -1,10 +1,13 @@
 --[[
-  FILE: ExeInput.lua
-	DESCRIPTION: Input
-	AUTHOR: Dewald Bodenstein
-	VERSION: 0.1
-	MOAI VERSION: v1.4p0
-	CREATED: 18-08-13
+    FILE: ExeInput.lua
+    DESCRIPTION: Input
+    AUTHOR: Dewald Bodenstein
+    VERSION: 0.2
+    MOAI VERSION: v1.4p0
+    CREATED: 18-08-13
+    Changes:
+        -- Added the object parameter to the add{}Event functions:
+           -- If object is passed then callback should be a string of the member functions name.
 ]]
 
 local _M = {}
@@ -43,39 +46,38 @@ function _M.init()
 end
 
 
-
-function _M.addKeyboardEvent(callback)
+function _M.addKeyboardEvent(callback,object)
   _M.keboardEventCount = _M.keboardEventCount+1
   local handle = "KeyEvent_".._M.keboardEventCount
-  _M.keyboardEvents[handle] = callback
+  _M.keyboardEvents[handle] = {func=callback,obj=object}
   return handle
 end
 
-function _M.addPointerEvent(callback)
+function _M.addPointerEvent(callback,object)
   _M.pointerEventCount = _M.pointerEventCount+1
   local handle = "PointEvent_".._M.pointerEventCount
-  _M.pointerEvents[handle] = callback
+  _M.pointerEvents[handle] = {func=callback,obj=object}
   return handle
 end
 
-function _M.addMouseLeftEvent(callback)
+function _M.addMouseLeftEvent(callback,object)
   _M.mouseLeftEventCount = _M.mouseLeftEventCount+1
   local handle = "MLeftEvent_".._M.mouseLeftEventCount
-  _M.mouseLeftEvents[handle] = callback
+  _M.mouseLeftEvents[handle] = {func=callback,obj=object}
   return handle
 end
 
-function _M.addMouseMiddleEvent(callback)
+function _M.addMouseMiddleEvent(callback,object)
   _M.mouseMiddleEventCount = _M.mouseMiddleEventCount+1
   local handle = "MMiddleEvent_".._M.mouseMiddleEventCount
-  _M.mouseMiddleEvents[handle] = callback
+  _M.mouseMiddleEvents[handle] = {func=callback,obj=object}
   return handle
 end
 
-function _M.addMouseRightEvent(callback)
+function _M.addMouseRightEvent(callback,object)
   _M.mouseRightEventCount = _M.mouseRightEventCount+1
   local handle = "MRightEvent_".._M.mouseRightEventCount
-  _M.mouseRightEvents[handle] = callback
+  _M.mouseRightEvents[handle] = {func=callback,obj=object}
   return handle
 end
 
@@ -107,36 +109,56 @@ end
 function _M.onKeyboardEvent(key, down)
   -- table size: table.getn(a)
   _M.keys[key] = down
-  for i,callback in pairs(_M.keyboardEvents) do
-    callback(key, down)
+  for i,group in pairs(_M.keyboardEvents) do
+    if group.obj ~= nil then
+        group.func(group.obj,key, down)
+    else 
+        group.func(key, down)
+    end
   end
 end
 
 function _M.onPointerEvent(x, y)
   _M.mousePos = {x=x,y=y}
-  for i,callback in pairs(_M.pointerEvents) do
-    callback(x, y)
+  for i,group in pairs(_M.pointerEvents) do
+    if group.obj ~= nil then
+        group.func(group.obj,x, y)
+    else 
+        group.func(x, y)
+    end
   end
 end
 
 function _M.onMouseLeftEvent(down)
   _M.buttons[1] = down
-  for i,callback in pairs(_M.mouseLeftEvents) do
-    callback(down)
+  for i,group in pairs(_M.mouseLeftEvents) do
+    if group.obj ~= nil then
+        group.func(group.obj,down)
+    else 
+        group.func(down)
+    end
   end
 end
 
 function _M.onMouseMiddleEvent(down)
   _M.buttons[2] = down
-  for i,callback in pairs(_M.mouseMiddleEvents) do
-    callback(down)
+  for i,group in pairs(_M.mouseMiddleEvents) do
+    if group.obj ~= nil then
+        group.func(group.obj,down)
+    else 
+        group.func(down)
+    end
   end
 end
 
 function _M.onMouseRightEvent(down)
   _M.buttons[3] = down
-  for i,callback in pairs(_M.mouseRightEvents) do
-    callback(down)
+  for i,group in pairs(_M.mouseRightEvents) do
+    if group.obj ~= nil then
+        group.func(group.obj,down)
+    else 
+        group.func(down)
+    end
   end
 end
 
