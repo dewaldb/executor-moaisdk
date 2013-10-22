@@ -18,29 +18,30 @@ setmetatable(ExeCamera, {
   end,
 })
 
-function ExeCamera.new(layer,viewport,minUnits,speed)
-  local self = setmetatable({}, ExeCamera)
-  
-  self.viewport = viewport
-  
-  self.camera = MOAICamera2D.new ()
-  layer:setCamera ( self.camera )
-
-  self.fitter = MOAICameraFitter2D.new ()
-  self.fitter:setViewport ( self.viewport )
-  self.fitter:setCamera ( self.camera )
-  --self.fitter:setFitScale ( 5 )
-  --self.fitter:setFitMode ( MOAICameraFitter2D.FITTING_MODE_SEEK_SCALE )
-  self.fitter:setMin ( minUnits )
-  self.fitter:setDamper( speed )
-  
-  return self
+function ExeCamera.new(speed)
+    local self = setmetatable({}, ExeCamera)
+    
+    self.viewport = ExeMap.viewport
+    
+    self.camera = MOAICamera2D.new ()
+    ExeMap.layer:setCamera ( self.camera )
+    ExeMap.debug_layer:setCamera( self.camera )
+    
+    self.fitter = MOAICameraFitter2D.new ()
+    self.fitter:setViewport ( self.viewport )
+    self.fitter:setCamera ( self.camera )
+    self.fitter:setFitScale ( worldScale )
+    self.fitter:setFitMode ( MOAICameraFitter2D.FITTING_MODE_SEEK_SCALE )
+    self.fitter:setMin ( worldScale )
+    self.fitter:setDamper( speed )
+    
+    return self
 end
 
 function ExeCamera:addAnchor(object)
   local anchor = MOAICameraAnchor2D.new ()
   anchor:setParent ( object )
-  anchor:setRect(0,0,5,5)
+  anchor:setRect(-(screenWidth/2)/worldScale,-(screenHeight/2)/worldScale,(screenWidth/2)/worldScale,(screenHeight/2)/worldScale)
   self.fitter:insertAnchor ( anchor )
   self.fitter:start ()
   
