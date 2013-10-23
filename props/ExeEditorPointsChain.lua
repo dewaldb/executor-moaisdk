@@ -35,7 +35,7 @@ function ExeEditorPointsChain.new(args)
     self.prop:setDeck ( self.scriptDeck )
     self.prop:setAttrLink(MOAIColor.INHERIT_COLOR, self.color, MOAIColor.COLOR_TRAIT)
     
-    ExeMap.layer:insertProp ( self.prop )
+    ExeGame.layer:insertProp ( self.prop )
     
     -- points chain control thread
     self.thread = MOAIThread.new()
@@ -51,7 +51,7 @@ function ExeEditorPointsChain.new(args)
 end
 
 function ExeEditorPointsChain:destroy()
-  ExeMap.layer:removeProp ( self.prop )
+  ExeGame.layer:removeProp ( self.prop )
   self.prop = nil
 end
 

@@ -38,7 +38,7 @@ function ExeEditor.new()
 
     self.ent_sprite = MOAIProp2D.new ()
     self.ent_sprite:setDeck ( ent_texture )
-    ExeMap.layer:insertProp ( self.ent_sprite )
+    ExeGame.layer:insertProp ( self.ent_sprite )
     
     local texture = MOAIGfxQuad2D.new ()
     texture:setTexture ( 'moai.png' )
@@ -46,7 +46,7 @@ function ExeEditor.new()
 
     self.sprite = MOAIProp2D.new ()
     self.sprite:setDeck ( texture )
-    ExeMap.layer:insertProp ( self.sprite )
+    ExeGame.layer:insertProp ( self.sprite )
     
     ExeEditor.points_chain = ExeMap.spawnEntity("ExeEditorPointsChain",{x=0,y=0,name="points chain"})
     
@@ -96,7 +96,7 @@ function ExeEditor.new()
 end
 
 function ExeEditor.pointerCallback(self,x, y)
-    self.mouseWorldX, self.mouseWorldY = ExeMap.layer:wndToWorld ( x, y )
+    self.mouseWorldX, self.mouseWorldY = ExeGame.layer:wndToWorld ( x, y )
     if self.dragged then
         self.dragMouseJoint:setTarget(self.mouseWorldX, self.mouseWorldY)
     end
@@ -104,7 +104,7 @@ end
 
 function ExeEditor.leftClickCallback(self,down)
     if down then
-        local prop = ExeMap.layer:getPartition():propForPoint ( self.mouseWorldX, self.mouseWorldY )
+        local prop = ExeGame.layer:getPartition():propForPoint ( self.mouseWorldX, self.mouseWorldY )
         --print(prop)
         if prop and prop.body then
             self.dragged = prop

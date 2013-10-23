@@ -55,7 +55,7 @@ function ExeRigidBody.new(args)
     sprite:setDeck ( texture )
     sprite.body = self.body
     sprite:setParent ( self.body )
-    ExeMap.layer:insertProp ( sprite )
+    ExeGame.layer:insertProp ( sprite )
     
     self.body.entity = self
     
@@ -64,7 +64,7 @@ end
 
 function ExeRigidBody:destroy()
     --self.body:destroy()
-    --ExeMap.layer:removeProp ( self.sprite )
+    --ExeGame.layer:removeProp ( self.sprite )
     --self.sprite = nil
 end
 

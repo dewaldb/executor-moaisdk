@@ -41,7 +41,7 @@ function ExeEditorPoint.new(args)
     self.sprite:setDeck ( self.texture )
     self.sprite.body = self.body
     self.sprite:setParent ( self.body )
-    ExeMap.layer:insertProp ( self.sprite )
+    ExeGame.layer:insertProp ( self.sprite )
     
     self.body.entity = self
     
@@ -50,7 +50,7 @@ end
 
 function ExeEditorPoint:destroy()
   self.body:destroy()
-  ExeMap.layer:removeProp ( self.sprite )
+  ExeGame.layer:removeProp ( self.sprite )
   self.sprite = nil
 end
 
