@@ -29,22 +29,12 @@ _M.BOX2D_WORLD = 0x0001
 _M.BOX2D_PROPS = 0x0002
 _M.BOX2D_SENSOR = 0x0003
 
-function _M.init(viewport,screenWidth,screenHeight)
-    ExeMap.viewport = viewport
-    
-    _M.layer = MOAILayer2D.new ()
-    _M.layer:setViewport ( viewport )
-    MOAISim.pushRenderPass ( _M.layer )
-    
-    _M.debug_layer = MOAILayer2D.new ()
-    _M.debug_layer:setViewport ( viewport )
-    MOAISim.pushRenderPass ( _M.debug_layer )
-    
+function _M.init()
     _M.physWorld = MOAIBox2DWorld.new ()
     _M.physWorld:setGravity ( 0, -10 )
     _M.physWorld:setUnitsToMeters ( 2 )
     _M.physWorld:start ()
-    _M.debug_layer:setBox2DWorld ( _M.physWorld )
+    ExeGame.layer_debug:setBox2DWorld ( _M.physWorld )
     
     _M.entities = {}
     _M.entityCount = 0
