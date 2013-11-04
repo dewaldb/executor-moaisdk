@@ -42,7 +42,7 @@ function ExeAnimSprite.new(host,args)
 
   self.prop = MOAIProp2D.new ()
   self.prop:setDeck ( tileLib )
-  ExeMap.layer:insertProp ( self.prop )
+  ExeGame.layer:insertProp ( self.prop ) -- won't allow animated sprites on any other layers, BAD!
 
   self.curve = MOAIAnimCurve.new ()
 
@@ -90,7 +90,7 @@ function ExeAnimSprite:destroy()
   self.anim:stop()
   self.anim = nil
   self.curve = nil
-  ExeMap.layer:removeProp ( self.prop )
+  ExeGame.layer:removeProp ( self.prop )
   self.prop = nil
 end
 
