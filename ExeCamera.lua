@@ -21,14 +21,12 @@ setmetatable(ExeCamera, {
 function ExeCamera.new(speed)
     local self = setmetatable({}, ExeCamera)
     
-    self.viewport = ExeMap.viewport
-    
     self.camera = MOAICamera2D.new ()
-    ExeMap.layer:setCamera ( self.camera )
-    ExeMap.debug_layer:setCamera( self.camera )
+    ExeGame.layer:setCamera ( self.camera )
+    ExeGame.layer_debug:setCamera( self.camera )
     
     self.fitter = MOAICameraFitter2D.new ()
-    self.fitter:setViewport ( self.viewport )
+    self.fitter:setViewport ( ExeGame.viewport )
     self.fitter:setCamera ( self.camera )
     self.fitter:setFitScale ( worldScale )
     self.fitter:setFitMode ( MOAICameraFitter2D.FITTING_MODE_SEEK_SCALE )
@@ -55,7 +53,7 @@ end
 function ExeCamera:clearAnchors()
   self.fitter:clearAnchors()
   
-  self.fitter:setViewport ( self.viewport )
+  self.fitter:setViewport ( ExeGame.viewport )
   self.fitter:setCamera ( self.camera )
 end
 
