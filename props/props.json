@@ -1,0 +1,56 @@
+[
+    {
+        "class": "ExeButton",
+        "args": {
+            "string":"name",
+            "float":"x",
+            "float":"y"
+        }
+    },
+    {
+        "class": "ExeCrate",
+        "args": {
+            "string":"name",
+            "float":"x",
+            "float":"y"
+        }
+    },
+    {
+        "class": "ExeFloorChain",
+        "args": {
+            "string":"name",
+            "float":"x",
+            "float":"y"
+        }
+    },
+    {
+        "class": "ExePlayer",
+        "args": {
+            "string":"name",
+            "float":"x",
+            "float":"y"
+        }
+    },
+    {
+        "class": "ExeRigidBody",
+        "args": {
+            "string":"name",
+            "float":"x",
+            "float":"y"
+        }
+    },
+    {
+        "class": "ExeRock",
+        "args": {
+            "string":"name",
+            "float":"x",
+            "float":"y"
+        }
+    },
+    {
+        "class": "ExeTimer",
+        "args": {
+            "string":"name"
+        }
+    }
+]
