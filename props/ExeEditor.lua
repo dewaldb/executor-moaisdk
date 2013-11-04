@@ -16,10 +16,13 @@ setmetatable(ExeEditor, {
   end,
 })
 
-function ExeEditor.new()
+function ExeEditor.new(args)
     local self = setmetatable({}, ExeEditor)
     
-    print('Editor Created')
+    self.name = args.name
+    
+    self.propClasses = {}
+    self:loadProps()
     
     self.max_speed = 2.5
     self.speed_lfrt = 0
@@ -40,12 +43,12 @@ function ExeEditor.new()
     self.ent_sprite:setDeck ( ent_texture )
     ExeGame.layer:insertProp ( self.ent_sprite )
     
-    local texture = MOAIGfxQuad2D.new ()
-    texture:setTexture ( 'moai.png' )
-    texture:setRect ( -0.5, -0.5, 0.5, 0.5 )
+    --local texture = MOAIGfxQuad2D.new ()
+    --texture:setTexture ( 'moai.png' )
+    --texture:setRect ( -0.5, -0.5, 0.5, 0.5 )
 
     self.sprite = MOAIProp2D.new ()
-    self.sprite:setDeck ( texture )
+    --self.sprite:setDeck ( texture )
     ExeGame.layer:insertProp ( self.sprite )
     
     ExeEditor.points_chain = ExeMap.spawnEntity("ExeEditorPointsChain",{x=0,y=0,name="points chain"})
@@ -54,9 +57,14 @@ function ExeEditor.new()
     ExeInput.addMouseLeftEvent(self.leftClickCallback,self)
     ExeInput.addMouseRightEvent(self.rightClickCallback,self)
     
-    if (nil ~= widgets.editorBtnSave) then
-	local button = widgets.editorBtnSave.window
+    if (nil ~= ExeGUI.widgets.editorBtnSave) then
+	local button = ExeGUI.widgets.editorBtnSave.window
 	button:registerEventHandler(button.EVENT_BUTTON_CLICK, nil, ExeEditor.save)
+    end
+    
+    if (nil ~= ExeGUI.widgets.editorBtnClear) then
+	local button = ExeGUI.widgets.editorBtnClear.window
+	button:registerEventHandler(button.EVENT_BUTTON_CLICK, nil, ExeEditor.clear)
     end
     
     -- editor control thread
@@ -140,6 +148,35 @@ function ExeEditor:activate(camera)
     camera:addAnchor(self.sprite)
 end
 
+function ExeEditor:loadProps()
+    local f,err = io.open("executor/props/props.json","r")
+    if not f then
+        return print(err)
+    end
+    local entString = f:read("*a")
+    f:close()
+    
+    local propScripts = json.decode(entString)
+    
+    local list = nil
+    if (nil ~= ExeGUI.widgets.editorLstClasses) then
+	list = ExeGUI.widgets.editorLstClasses.window
+	--button:registerEventHandler(button.EVENT_BUTTON_CLICK, nil, ExeEditor.clear)
+        list:setBackgroundImage("resources/gui/background.png")
+    end
+    
+    for i,script in ipairs(propScripts) do
+        self.propClasses[script.class] = script
+        
+        if list then
+            local row = list:addRow()
+            -- The return from getCell is the widget created by setColumnWidget, so the normal
+            -- functionality for the widget is available.
+            row:getCell(1):setText(script.class)
+        end
+    end
+end
+
 function ExeEditor.save()
     local points = json.encode(ExeEditor.points_chain.points)
     
@@ -152,8 +189,15 @@ function ExeEditor.save()
     f:close()
 end
 
+function ExeEditor.clear()
+    ExeMap.clearMap()
+    ExeMap.loadMap("data/maps/editor1.lua")
+end
+
 function ExeEditor:destroy()
-    ExeInput.removeKeyboardEvent(self.keyEventHandle)
+    --ExeInput.removeKeyboardEvent(self.keyEventHandle)
+    ExeGame.layer:removeProp ( self.sprite )
+    self.sprite = nil
     self.thread:stop()
     self.thread = nil
 end
