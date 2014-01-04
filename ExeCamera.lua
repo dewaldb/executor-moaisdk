@@ -22,8 +22,9 @@ function ExeCamera.new(speed)
     local self = setmetatable({}, ExeCamera)
     
     self.camera = MOAICamera2D.new ()
-    ExeGame.layer:setCamera ( self.camera )
-    ExeGame.layer_debug:setCamera( self.camera )
+    for i,val in pairs(ExeGame.layers) do
+        val:setCamera ( self.camera )
+    end
     
     self.fitter = MOAICameraFitter2D.new ()
     self.fitter:setViewport ( ExeGame.viewport )
