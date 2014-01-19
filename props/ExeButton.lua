@@ -48,7 +48,7 @@ function ExeButton.new(args)
 end
 
 function ExeButton:interact(entity)
-  ExeMap.spawnEntity("ExeCrate",{x=math.random(10)-5,y=math.random(10)-5})
+  ExeMap.spawnEntity({class="ExeCrate",args={x=math.random(10)-5,y=math.random(10)-5}})
 end
 
 function ExeButton:destroy()
