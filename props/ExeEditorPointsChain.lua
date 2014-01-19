@@ -56,7 +56,7 @@ function ExeEditorPointsChain:destroy()
 end
 
 function ExeEditorPointsChain:createPoint(posx,posy)
-    table.insert(self.phys_points,ExeMap.spawnEntity("ExeEditorPoint",{x=posx,y=posy,name="point_"..#self.phys_points}))
+    table.insert(self.phys_points,ExeMap.spawnEntity({class="ExeEditorPoint",args={x=posx,y=posy,name="point_"..#self.phys_points}}))
 end
 
 function ExeEditorPointsChain:listPoints()
