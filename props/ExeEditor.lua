@@ -51,7 +51,7 @@ function ExeEditor.new(args)
     --self.sprite:setDeck ( texture )
     ExeGame.layer:insertProp ( self.sprite )
     
-    ExeEditor.points_chain = ExeMap.spawnEntity("ExeEditorPointsChain",{x=0,y=0,name="points chain"})
+    ExeEditor.points_chain = ExeMap.spawnEntity({class="ExeEditorPointsChain",args={x=0,y=0,name="points chain"}})
     
     ExeInput.addPointerEvent(self.pointerCallback,self)
     ExeInput.addMouseLeftEvent(self.leftClickCallback,self)
